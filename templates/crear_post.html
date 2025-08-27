@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Crear Publicación en el Foro{% endblock %}
+{% block content %}
+    <div class="form-container">
+        <h1>Crear Nueva Publicación en el Foro</h1>
+        <form method="POST" action="" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.titulo.label }}
+                {{ form.titulo(class="form-control") }}
+                {% if form.titulo.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.titulo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.contenido.label }}
+                {{ form.contenido(class="form-control", rows="8") }}
+                {% if form.contenido.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.contenido.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.imagen.label }}
+                {{ form.imagen(class="form-control-file") }}
+                {% if form.imagen.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.imagen.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.video_url.label }}
+                {{ form.video_url(class="form-control") }}
+                {% if form.video_url.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.video_url.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Publicar</button>
+            <a href="{{ url_for('foro') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+{% endblock %}

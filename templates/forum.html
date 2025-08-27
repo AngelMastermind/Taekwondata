@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Foro del Club{% endblock %}
+{% block content %}
+    <div class="forum-header">
+        <h1>Foro del Club</h1>
+        {% if current_user.is_authenticated and current_user.is_admin %}
+            <a href="{{ url_for('crear_post') }}" class="btn btn-primary">Crear Nueva Publicación</a>
+        {% endif %}
+    </div>
+
+    <div class="forum-post-list">
+        {% if posts %}
+            {% for post in posts %}
+                <div class="forum-post-item">
+                    <h3>{{ post.titulo }}</h3>
+                    <p class="forum-post-meta">Publicado por {{ post.autor.nombre }} {{ post.autor.apellido }} el {{ post.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p class="forum-post-content">{{ post.contenido }}</p>
+                    {% if post.imagen_data %}
+                        <img src="{{ url_for('foro_imagen', post_id=post.id) }}" alt="Imagen de la publicación" class="forum-post-image">
+                    {% endif %}
+                    {% if post.video_url %}
+                        <div class="video-responsive">
+                            <iframe class="forum-post-video" src="https://www.youtube.com/embed/{{ post.video_url }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    {% endif %}
+                    {# Botón para eliminar publicación (solo para administradores) #}
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                        <form action="{{ url_for('eliminar_post', post_id=post.id) }}" method="POST" class="inline-block mt-4">
+                            <button type="submit" class="btn btn-danger">Eliminar Publicación</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No hay publicaciones en el foro aún.</p>
+        {% endif %}
+    </div>
+{% endblock %}
+

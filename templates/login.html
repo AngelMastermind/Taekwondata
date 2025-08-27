@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Iniciar Sesión{% endblock %}
+{% block content %}
+    <div class="form-container">
+        <h1>Iniciar Sesión en TAEKWONDATA</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form method="POST" action="">
+            {{ form.hidden_tag() }} <!-- Añade esto -->
+            <div class="form-group">
+                {{ form.email.label }} {{ form.email(class="form-control") }}
+                {% if form.email.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.password.label }} {{ form.password(class="form-control") }}
+                {% if form.password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.password.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="checkbox-group">
+                {{ form.remember(class="form-check-input") }}
+                {{ form.remember.label(class="form-check-label") }}
+            </div>
+            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+            <div class="form-link">¿No tienes cuenta? <a href="{{ url_for('registrar') }}">Regístrate aquí</a></div>
+            <div class="form-link">¿Olvidaste tu contraseña? <a href="{{ url_for('olvide_contrasena') }}">Recupérala aquí</a></div>
+        </form>
+    </div>
+{% endblock %}

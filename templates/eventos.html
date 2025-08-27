@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Eventos{% endblock %}
+{% block content %}
+    <h1>Eventos</h1>
+    <div class="event-list">
+        {% for evento in eventos %}
+            <div class="event-item">
+                <h3>{{ evento.titulo }}</h3>
+                {% if evento.imagen_data %}
+                    <img src="{{ url_for('evento_imagen', event_id=evento.id) }}" alt="Imagen del evento" class="event-image">
+                {% endif %}
+                <p>Fecha: {{ evento.fecha_inicio.strftime('%d/%m/%Y %H:%M') }} - {{ evento.fecha_fin.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p>Ubicación: {{ evento.ubicacion }}</p>
+                <p>{{ evento.descripcion }}</p>
+                <p>Organizado por: {{ evento.organizador.nombre }} {{ evento.organizador.apellido }}</p>
+
+                {% if current_user.is_authenticated %}
+                    {% set is_registered = false %}
+                    {% for attendee in evento.attendees %}
+                        {% if attendee.id == current_user.id %}
+                            {% set is_registered = true %}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if is_registered %}
+                        <p class="text-green-600 font-bold">Ya Registrado</p>
+                    {% else %}
+                        <!-- Formulario para registrarse al evento (POST) -->
+                        <form action="{{ url_for('registrar_evento', event_id=evento.id) }}" method="POST" class="inline-block">
+                            <button type="submit" class="btn btn-primary">Registrarse al Evento</button>
+                        </form>
+                    {% endif %}
+
+                    {% if current_user.is_admin %}
+                        <div>
+                            <h4>Asistentes Registrados ({{ evento.attendees|length }})</h4>
+                            {% if evento.attendees %}
+                                <ul>
+                                    {% for attendee in evento.attendees %}
+                                        <li>{{ attendee.nombre }} {{ attendee.apellido }} ({{ attendee.email }})</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No hay asistentes registrados para este evento aún.</p>
+                            {% endif %}
+                        </div>
+                        <!-- Formulario para eliminar evento (POST) -->
+                        <form action="{{ url_for('eliminar_evento', event_id=evento.id) }}" method="POST" class="inline-block mt-4">
+                            <button type="submit" class="btn btn-danger">Eliminar Evento</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    {% if current_user.is_authenticated and current_user.is_admin %}
+        <a href="{{ url_for('crear_evento') }}" class="btn btn-primary">Crear Nuevo Evento</a>
+    {% endif %}
+{% endblock %}

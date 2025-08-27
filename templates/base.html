@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="{{ url_for('index') }}" class="logo">TaekwonData</a>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{{ url_for('index') }}"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="{{ url_for('eventos') }}"><i class="fas fa-calendar-alt"></i> Eventos</a></li>
+                    <li><a href="{{ url_for('soporte_pagos') }}"><i class="fas fa-wallet"></i> Soporte de Pagos</a></li>
+                    <li><a href="{{ url_for('club_info') }}"><i class="fas fa-info-circle"></i> Información del Club</a></li>
+                    <li><a href="{{ url_for('foro') }}"><i class="fas fa-comments"></i> Foro</a></li>
+                    {% if current_user.is_authenticated and current_user.is_admin %}
+                        <li><a href="{{ url_for('analisis') }}"><i class="fas fa-chart-line"></i> Análisis</a></li>
+                        <li><a href="{{ url_for('crear_evento') }}"><i class="fas fa-plus-circle"></i> Crear Evento</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="main-content-wrapper">
+            <!-- Topbar -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="sidebar-toggle" class="sidebar-toggle-button"><i class="fas fa-bars"></i></button>
+                    <span class="page-title">{% block page_header %}{% endblock %}</span>
+                </div>
+                <div class="topbar-right">
+                    <button id="theme-toggle" class="theme-toggle-button">
+                        <i class="fas fa-sun"></i> <span class="theme-text">Cambiar a Tema Claro</span>
+                    </button>
+                    <div class="user-menu">
+                        {% if current_user.is_authenticated %}
+                            <span class="user-name">{{ current_user.nombre }}</span>
+                            <a href="{{ url_for('logout') }}" class="btn btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+                        {% else %}
+                            <a href="{{ url_for('login') }}" class="btn btn-login"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                            <a href="{{ url_for('registrar') }}" class="btn btn-register"><i class="fas fa-user-plus"></i> Registro</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <main class="page-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                {% block content %}{% endblock %}
+            </main>
+
+            <footer class="footer">
+                <p>© {{ datetime.now().year }} TaekwonData. Todos los derechos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>

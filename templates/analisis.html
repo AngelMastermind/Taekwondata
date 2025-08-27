@@ -1,0 +1,38 @@
+{# MultipleFiles/templates/analisis.html #}
+{% extends 'base.html' %}
+{% block title %}Análisis de Datos{% endblock %}
+{% block content %}
+    <div class="container">
+        <h1>Análisis Gráfico de Datos</h1>
+
+        {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+        {% else %}
+            <div class="chart-section">
+                <h2>📊 Usuarios por Evento</h2>
+                <img src="data:image/png;base64,{{ plot_url_usuarios_por_evento }}" alt="Gráfico de Usuarios por Evento">
+                <p class="chart-description">Este gráfico de barras muestra la cantidad total de usuarios registrados en cada evento disponible en la plataforma. Permite identificar rápidamente cuáles son los eventos más populares o con mayor asistencia.</p>
+            </div>
+
+            <div class="chart-section">
+                <h2>📈 Eventos por Fecha</h2>
+                <img src="data:image/png;base64,{{ plot_url_eventos_por_fecha }}" alt="Gráfico de Eventos por Fecha">
+                <p class="chart-description">Este gráfico de líneas ilustra la distribución de eventos a lo largo del tiempo, mostrando cuántos eventos se han programado o realizado en fechas específicas. Es útil para observar tendencias o picos de actividad.</p>
+            </div>
+
+            <div class="chart-section">
+                <h2>🥇 TOP 20 Usuarios Más Activos</h2>
+                <img src="data:image/png;base64,{{ plot_url_usuarios_activos }}" alt="Gráfico de Usuarios Más Activos">
+                <p class="chart-description">Este gráfico de barras horizontales presenta el TOP 20 de usuarios que han asistido a la mayor cantidad de eventos. Destaca a los participantes más comprometidos y activos en la comunidad.</p>
+            </div>
+
+            {# NUEVA GRÁFICA AÑADIDA AQUÍ #}
+            <div class="chart-section">
+                <h2>📝 Usuarios Registrados por Fecha de Inscripción</h2>
+                <img src="data:image/png;base64,{{ plot_url_usuarios_por_inscripcion }}" alt="Gráfico de Usuarios Registrados por Fecha de Inscripción">
+                <p class="chart-description">Este gráfico de barras muestra la cantidad de nuevos usuarios que se han registrado en la plataforma en diferentes fechas. Permite observar el ritmo de crecimiento de la comunidad.</p>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

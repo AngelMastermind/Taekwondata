@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% block title %}Olvidaste tu Contraseña{% endblock %}
+{% block content %}
+    <div class="form-container">
+        <h1>¿Olvidaste tu Contraseña?</h1>
+        <p>Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
+        <form method="POST" action="">
+            <div class="form-group">
+                {{ form.email.label }}
+                {{ form.email(class="form-control") }}
+                {% if form.email.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.email.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar Enlace de Restablecimiento</button>
+            <div class="form-link">¿Recordaste tu contraseña? <a href="{{ url_for('login') }}">Inicia sesión aquí</a></div>
+        </form>
+    </div>
+{% endblock %}

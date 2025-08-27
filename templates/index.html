@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Inicio{% endblock %}
+
+{% block page_header %}Inicio{% endblock %} {# AÑADIDO ESTO #}
+
+{% block content %}
+    <div class="hero">
+        <h1>Bienvenido a TaekwonData</h1>
+        <p>La plataforma para gestionar tu club de Taekwondo.</p>
+        <a href="{{ url_for('eventos') }}" class="cta-button">Ver Eventos</a>
+    </div>
+
+    <div class="eventos-preview">
+        <h2>Próximos Eventos</h2>
+        {% if eventos %}
+            <div class="event-cards">
+                {% for evento in eventos %}
+                    <div class="event-card">
+                        <h3>{{ evento.titulo }}</h3>
+                        {% if evento.imagen_data %}
+                            <img src="{{ url_for('evento_imagen', event_id=evento.id) }}" alt="Imagen del evento" class="event-card-image">
+                        {% endif %}
+                        <p>{{ evento.fecha_inicio.strftime('%d/%m/%Y %H:%M') }}</p>
+                        <p>Ubicación: {{ evento.ubicacion }}</p>
+                        <a href="{{ url_for('eventos') }}">Ver más</a>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No hay eventos próximos.</p>
+        {% endif %}
+    </div>
+{% endblock %}

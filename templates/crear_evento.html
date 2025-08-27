@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %}Crear Evento{% endblock %}
+{% block content %}
+    <div class="form-container">
+        <h1>Crear Nuevo Evento</h1>
+        <form method="POST" action="" enctype="multipart/form-data"> <!-- Añadir enctype -->
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.titulo.label }}
+                {{ form.titulo(class="form-control") }}
+                {% if form.titulo.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.titulo.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.descripcion.label }}
+                {{ form.descripcion(class="form-control", rows="5") }}
+                {% if form.descripcion.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.descripcion.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.fecha_inicio.label }}
+                {{ form.fecha_inicio(class="form-control", type="datetime-local") }}
+                {% if form.fecha_inicio.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.fecha_inicio.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.fecha_fin.label }}
+                {{ form.fecha_fin(class="form-control", type="datetime-local") }}
+                {% if form.fecha_fin.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.fecha_fin.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.ubicacion.label }}
+                {{ form.ubicacion(class="form-control") }}
+                {% if form.ubicacion.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.ubicacion.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                {{ form.imagen.label }}
+                {{ form.imagen(class="form-control-file") }} {# Usar una clase diferente para estilizar el input file #}
+                {% if form.imagen.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in form.imagen.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary">Crear Evento</button>
+            <a href="{{ url_for('eventos') }}" class="btn btn-secondary">Cancelar</a>
+        </form>
+    </div>
+{% endblock %}
