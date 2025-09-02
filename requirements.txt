@@ -1,0 +1,11 @@
+flask
+flask_sqlalchemy
+flask_wtf
+flask_login
+werkzeug
+sqlalchemy
+pymysql
+matplotlib
+pandas
+pyodbc
+psycopg2-binary

@@ -178,7 +178,8 @@ def eliminar_evento(event_id):
 
     evento = Evento.query.get_or_404(event_id)
     try:
-        db.session.execute(text(f"DELETE FROM event_attendees WHERE event_id = {event_id}"))
+        # Asegúrate de que el nombre de la tabla de asociación sea correcto y entre comillas dobles
+        db.session.execute(text(f'DELETE FROM "event_attendees" WHERE event_id = {event_id}'))
         db.session.delete(evento)
         db.session.commit()
         flash(f'✅ Evento "{evento.titulo}" eliminado exitosamente.', 'success')
@@ -346,10 +347,10 @@ def analisis():
 
         # 2. Gráfica: Eventos por Fecha (agrupado por mes y año)
         eventos_por_fecha_data = db.session.query(
-            text("FORMAT(fecha_inicio, 'yyyy-MM') AS fecha_mes"),
+            text("TO_CHAR(fecha_inicio, 'YYYY-MM') AS fecha_mes"), # CAMBIO PARA POSTGRESQL
             func.count(Evento.id)
         ).group_by(
-            text("FORMAT(fecha_inicio, 'yyyy-MM')")
+            text("TO_CHAR(fecha_inicio, 'YYYY-MM')") # CAMBIO PARA POSTGRESQL
         ).order_by(
             text("fecha_mes")
         ).all()
@@ -394,10 +395,10 @@ def analisis():
         # 4. NUEVA Gráfica: Usuarios Registrados por Fecha de Inscripción
         # CORRECCIÓN: Delimitar la tabla y la columna correctamente y usar la función CONVERT.
         usuarios_por_inscripcion_data = db.session.query(
-            text("CONVERT(date, [Users].fecha_inscripcion) AS fecha_inscripcion"),
+            text('"Users".fecha_inscripcion::date AS fecha_inscripcion'), # CAMBIO PARA POSTGRESQL
             func.count(User.id)
         ).group_by(
-            text("CONVERT(date, [Users].fecha_inscripcion)")
+            text('"Users".fecha_inscripcion::date') # CAMBIO PARA POSTGRESQL
         ).order_by(
             text("fecha_inscripcion")
         ).all()

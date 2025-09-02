@@ -9,12 +9,12 @@ db = SQLAlchemy()
 
 # Tabla de asociación para la relación muchos a muchos entre User y Evento (asistentes)
 event_attendees = Table('event_attendees', db.Model.metadata,
-    Column('user_id', Integer, ForeignKey('Users.id'), primary_key=True),
-    Column('event_id', Integer, ForeignKey('Eventos.id'), primary_key=True)
+    Column('user_id', Integer, ForeignKey('"Users".id'), primary_key=True),
+    Column('event_id', Integer, ForeignKey('"Eventos".id'), primary_key=True)
 )
 
 class User(db.Model, UserMixin):
-    __tablename__ = 'Users'
+    __tablename__ = '"Users"' # Usar comillas dobles para respetar mayúsculas en PostgreSQL
     id = Column(Integer, primary_key=True)
     nombre = Column(String(100), nullable=False)
     apellido = Column(String(100), nullable=False)
@@ -48,14 +48,14 @@ class User(db.Model, UserMixin):
         return f'<Usuario(nombre="{self.nombre}", apellido="{self.apellido}")>'
 
 class Evento(db.Model):
-    __tablename__ = 'Eventos'
+    __tablename__ = '"Eventos"' # Usar comillas dobles para respetar mayúsculas en PostgreSQL
     id = Column(Integer, primary_key=True)
     titulo = Column(String(200), nullable=False)
     descripcion = Column(Text, nullable=False)
     fecha_inicio = Column(DateTime, nullable=False)
     fecha_fin = Column(DateTime, nullable=False)
     ubicacion = Column(String(200), nullable=False)
-    organizador_id = Column(Integer, ForeignKey('Users.id'), nullable=False)
+    organizador_id = Column(Integer, ForeignKey('"Users".id'), nullable=False)
     organizador = relationship('User', backref='eventos_organizados')
 
     # Relación para los asistentes al evento
@@ -70,7 +70,7 @@ class Evento(db.Model):
 
 # Modelo para las publicaciones del foro
 class ForumPost(db.Model):
-    __tablename__ = 'ForumPosts'
+    __tablename__ = '"ForumPosts"' # Usar comillas dobles para respetar mayúsculas en PostgreSQL
     id = Column(Integer, primary_key=True)
     titulo = Column(String(255), nullable=False)
     contenido = Column(Text, nullable=False)
@@ -78,8 +78,7 @@ class ForumPost(db.Model):
     imagen_mimetype = Column(String(50), nullable=True)
     video_url = Column(String(255), nullable=True)  # URL del video (ej: YouTube)
     fecha_creacion = Column(DateTime, nullable=False, default=datetime.now)
-    autor_id = Column(Integer, ForeignKey('Users.id'), nullable=False)
+    autor_id = Column(Integer, ForeignKey('"Users".id'), nullable=False)
 
     def __repr__(self):
         return f'<ForumPost(titulo="{self.titulo}", autor_id="{self.autor_id}")>'
-
